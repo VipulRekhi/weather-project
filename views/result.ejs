@@ -1,29 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><%= place %> — Weatherly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
 </head>
+<body class="page page--result">
+    <div class="dashboard">
+        <aside class="dashboard__sidebar" aria-label="Navigation">
+            <div class="sidebar__brand">
+                <svg class="sidebar__logo" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <circle cx="24" cy="24" r="10" fill="#FBBF24"/>
+                    <path d="M14 30c0-5.5 4.5-10 10-10s10 4.5 10 10" fill="#E0F2FE" stroke="#93C5FD" stroke-width="1.5"/>
+                    <path d="M10 32c2-4 6-6 10-6h8c4 0 8 2 10 6" fill="#fff" opacity="0.9"/>
+                </svg>
+                <span class="sidebar__name">Weatherly</span>
+            </div>
+        </aside>
 
-<body>
-    <h1>Welcome to Result</h1>
-    <h4>note that weather report updates every 15 minutes
-    </h4>
+        <main class="dashboard__main">
+            <header class="dashboard-header">
+                <h1 class="dashboard-header__title">Weatherly</h1>
+                <p class="dashboard-header__updated">Last updated: <%= time %></p>
+                <form action="/" method="GET">
+                    <button type="submit" class="btn btn--ghost">Search Again</button>
+                </form>
+            </header>
 
-    <h3>The result is as follow</h3>
-    place: <%= place %> <br><br>
-        Reading time: <%=time %> <br><br>
-            Temperature: <%=temp %> celcius<br><br>
-                Humidity: <%=humi %> %<br><br>
-                    Dew point: <%=dew %> celcius<br><br>
-                        Wind Speed: <%=wind %> km/hr<br><br>
-                            apperant Temperature: <%=aptemp %> celcius<br><br>
-                                Surface Pressure: <%=pressure %> hpa<br><br>
-                                    <form action="/" method="GET">
-                                        <button type="submit">Go Back</button>
-                                    </form>
+            <section class="hero" aria-label="Current conditions">
+                <div class="hero__content">
+                    <h2 class="hero__city"><%= place %></h2>
+                    <p class="hero__temp"><%= temp %>°C</p>
+                    <p class="hero__feels">Feels like <%= aptemp %>°C</p>
+                </div>
+                <div class="hero__icon" aria-hidden="true">
+                    <svg viewBox="0 0 120 120" fill="none">
+                        <circle cx="72" cy="42" r="22" fill="#FBBF24"/>
+                        <g stroke="#FBBF24" stroke-width="3" stroke-linecap="round">
+                            <line x1="72" y1="10" x2="72" y2="18"/>
+                            <line x1="72" y1="66" x2="72" y2="74"/>
+                            <line x1="40" y1="42" x2="48" y2="42"/>
+                            <line x1="96" y1="42" x2="104" y2="42"/>
+                            <line x1="49" y1="19" x2="55" y2="25"/>
+                            <line x1="89" y1="59" x2="95" y2="65"/>
+                            <line x1="49" y1="65" x2="55" y2="59"/>
+                            <line x1="89" y1="25" x2="95" y2="19"/>
+                        </g>
+                        <ellipse cx="48" cy="78" rx="36" ry="22" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="2"/>
+                        <ellipse cx="68" cy="74" rx="28" ry="18" fill="#fff" stroke="#E2E8F0" stroke-width="1.5"/>
+                    </svg>
+                </div>
+            </section>
+
+            <section class="stats" aria-label="Weather details">
+                <article class="stat-card stat-card--humidity">
+                    <span class="stat-card__label">Humidity</span>
+                    <span class="stat-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0L12 2.69z"/>
+                        </svg>
+                    </span>
+                    <p class="stat-card__value"><%= humi %> %</p>
+                </article>
+
+                <article class="stat-card stat-card--wind">
+                    <span class="stat-card__label">Wind Speed</span>
+                    <span class="stat-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
+                        </svg>
+                    </span>
+                    <p class="stat-card__value"><%= wind %> km/h</p>
+                </article>
+
+                <article class="stat-card stat-card--pressure">
+                    <span class="stat-card__label">Pressure</span>
+                    <span class="stat-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="M12 7v5l3 2"/>
+                        </svg>
+                    </span>
+                    <p class="stat-card__value"><%= pressure %> hPa</p>
+                </article>
+
+                <article class="stat-card stat-card--dew">
+                    <span class="stat-card__label">Dew Point</span>
+                    <span class="stat-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="currentColor" opacity="0.85">
+                            <path d="M12 3c-4 6-7 9-7 13a7 7 0 0 0 14 0c0-4-3-7-7-13z"/>
+                        </svg>
+                    </span>
+                    <p class="stat-card__value"><%= dew %> °C</p>
+                </article>
+
+                <article class="stat-card stat-card--feels">
+                    <span class="stat-card__label">Feels Like</span>
+                    <span class="stat-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
+                        </svg>
+                    </span>
+                    <p class="stat-card__value"><%= aptemp %> °C</p>
+                </article>
+
+                <article class="stat-card stat-card--time">
+                    <span class="stat-card__label">Last Update</span>
+                    <span class="stat-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </span>
+                    <p class="stat-card__value"><%= time %></p>
+                </article>
+            </section>
+
+            <footer class="dashboard-footer">
+                <form action="/" method="GET">
+                    <button type="submit" class="dashboard-footer__link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <polyline points="23 4 23 10 17 10"/>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                        Search Another City
+                    </button>
+                </form>
+            </footer>
+        </main>
+    </div>
 </body>
-
 </html>

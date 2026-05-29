@@ -3,6 +3,7 @@ import axios from "axios";
 import { error } from "node:console";
 const app = express();
 const port = 3000;
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
     res.render("index.ejs", {});
