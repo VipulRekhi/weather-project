@@ -1,19 +1,30 @@
 import express from "express";
 import axios from "axios";
 import { error } from "node:console";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const port = 3000;
-app.use(express.static("public"));
+
+// Set views and static assets paths relative to the entry point
+app.set("views", path.join(__dirname, "../views"));
+app.use(express.static(path.join(__dirname, "../public")));
+
 app.use(express.urlencoded({ extended: true }));
+
 app.get("/", (req, res) => {
     res.render("index.ejs", {});
 });
+
 app.post("/result", async (req, res) => {
     const place = req.body.place;
     console.log(place);
     try {
-
-        //finding coordinates
+        // finding coordinates
         const place_info = await axios.get(`https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=1`);
         const cord_info = place_info.data;
         if (!cord_info.results || cord_info.results.length === 0) {
@@ -26,33 +37,33 @@ app.post("/result", async (req, res) => {
         console.log(place_lati);
         console.log(place_longi);
 
-        //determining weather
+        // determining weather
         const weather = await axios.get(
             `https://api.open-meteo.com/v1/forecast?latitude=${place_lati}&longitude=${place_longi}&timezone=auto&current=temperature_2m,relative_humidity_2m,dew_point_2m,wind_speed_10m,apparent_temperature,surface_pressure,cloud_cover`
         );
         const weather_data = weather.data;
         console.log(weather_data);
-        res.render("result.ejs",
-            {
-        place:req.body.place,
-        time:weather_data.current.time,
-        temp:weather_data.current.temperature_2m,
-        humi:weather_data.current.relative_humidity_2m,
-        dew:weather_data.current.dew_point_2m,
-        wind:weather_data.current.wind_speed_10m,
-        aptemp:weather_data.current.apparent_temperature,
-        pressure:weather_data.current.surface_pressure
-            });
-        }
-    catch (error) {
-        res.render("index.ejs",
-            {
-                error: "API request failed"
-            }
-        )
-
+        res.render("result.ejs", {
+            place: req.body.place,
+            time: weather_data.current.time,
+            temp: weather_data.current.temperature_2m,
+            humi: weather_data.current.relative_humidity_2m,
+            dew: weather_data.current.dew_point_2m,
+            wind: weather_data.current.wind_speed_10m,
+            aptemp: weather_data.current.apparent_temperature,
+            pressure: weather_data.current.surface_pressure
+        });
+    } catch (error) {
+        res.render("index.ejs", {
+            error: "API request failed"
+        });
     }
-
 });
 
-app.listen(port);
+if (process.env.NODE_ENV !== "production") {
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+}
+
+export default app;
