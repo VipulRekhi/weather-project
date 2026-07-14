@@ -7,12 +7,13 @@ const port = 3000;
 
 // Set views and static assets paths relative to the project root
 app.set("views", path.join(process.cwd(), "views"));
+app.set("view engine", "ejs");
 app.use(express.static(path.join(process.cwd(), "public")));
 
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.render("index.ejs", {});
+    res.render("index", {});
 });
 
 app.post("/result", async (req, res) => {
@@ -23,7 +24,7 @@ app.post("/result", async (req, res) => {
         const place_info = await axios.get(`https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=1`);
         const cord_info = place_info.data;
         if (!cord_info.results || cord_info.results.length === 0) {
-            return res.render("index.ejs", {
+            return res.render("index", {
                 error: "No such place exists"
             });
         }
@@ -38,7 +39,7 @@ app.post("/result", async (req, res) => {
         );
         const weather_data = weather.data;
         console.log(weather_data);
-        res.render("result.ejs", {
+        res.render("result", {
             place: req.body.place,
             time: weather_data.current.time,
             temp: weather_data.current.temperature_2m,
@@ -49,7 +50,7 @@ app.post("/result", async (req, res) => {
             pressure: weather_data.current.surface_pressure
         });
     } catch (error) {
-        res.render("index.ejs", {
+        res.render("index", {
             error: "API request failed"
         });
     }
