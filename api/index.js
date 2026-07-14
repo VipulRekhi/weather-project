@@ -1,18 +1,13 @@
 import express from "express";
 import axios from "axios";
-import { error } from "node:console";
 import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
 
-// Set views and static assets paths relative to the entry point
-app.set("views", path.join(__dirname, "../views"));
-app.use(express.static(path.join(__dirname, "../public")));
+// Set views and static assets paths relative to the project root
+app.set("views", path.join(process.cwd(), "views"));
+app.use(express.static(path.join(process.cwd(), "public")));
 
 app.use(express.urlencoded({ extended: true }));
 
